@@ -23,5 +23,6 @@ This project follows the principles of Clean Architecture, which consists of sev
 
 1. Clone this repository: `git clone https://github.com/djuricic1/cleanarchtasks-py.git`
 2. Navigate to the project directory: `cd cleanarchtasks-py`
-3. to be added
+3. Make sure you have poetry installed and run `poetry install`
+4. Running tests: `pytest tests`
 
