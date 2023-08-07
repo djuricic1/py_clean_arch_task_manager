@@ -1,5 +1,5 @@
 import datetime
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from enum import Enum
 from uuid import UUID
 
@@ -25,3 +25,6 @@ class Task:
     priority: Priority
     status: Status
     assignee_id: UUID
+
+    def to_dict(self) -> dict:
+        return asdict(self)

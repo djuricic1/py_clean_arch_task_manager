@@ -13,8 +13,15 @@ def test_task_init():
     status = Status.NOT_STARTED
     assignee_id = uuid4()
 
-    task = Task(id=task_id, title=title, description=description, due_date=due_date,
-                priority=priority, status=status, assignee_id=assignee_id)
+    task = Task(
+        id=task_id,
+        title=title,
+        description=description,
+        due_date=due_date,
+        priority=priority,
+        status=status,
+        assignee_id=assignee_id,
+    )
 
     assert task.id == task_id
     assert task.title == title
@@ -23,3 +30,35 @@ def test_task_init():
     assert task.priority == priority
     assert task.status == status
     assert task.assignee_id == assignee_id
+
+
+def test_task_to_dict():
+    task_id = uuid4()
+    title = "Finish Project"
+    description = "Complete the project before the deadline."
+    due_date = date(2023, 8, 31)
+    priority = Priority.HIGH
+    status = Status.NOT_STARTED
+    assignee_id = uuid4()
+
+    task = Task(
+        id=task_id,
+        title=title,
+        description=description,
+        due_date=due_date,
+        priority=priority,
+        status=status,
+        assignee_id=assignee_id,
+    )
+
+    task_dict = task.to_dict()
+
+    assert task_dict == {
+        "id": task_id,
+        "title": title,
+        "description": description,
+        "due_date": due_date,
+        "priority": priority,
+        "status": status,
+        "assignee_id": assignee_id,
+    }
