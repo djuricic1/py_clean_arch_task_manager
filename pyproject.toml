@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "py-clean-arch-task-manager"
 version = "0.1.0"
-description = ""
+description = "Clean Architecture Demonstration"
 authors = ["Dejan"]
 readme = "README.md"
 packages = [{include = "py_clean_arch_task_manager"}]
@@ -12,6 +12,7 @@ python = "^3.11"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.0"
+black = "^23.7.0"
 
 [build-system]
 requires = ["poetry-core"]
