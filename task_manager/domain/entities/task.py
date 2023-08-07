@@ -26,5 +26,9 @@ class Task:
     status: Status
     assignee_id: UUID
 
+    @classmethod
+    def create_from_dict(cls, data: dict) -> "Task":
+        return Task(**data)
+
     def to_dict(self) -> dict:
         return asdict(self)

@@ -15,6 +15,20 @@ def test_user_init():
     assert user.email == email
 
 
+def test_user_create_from_dict():
+    user_data = {
+        'id': uuid4(),
+        'username': 'alice',
+        'email': 'alice@example.com'
+    }
+
+    user = User.create_from_dict(user_data)
+
+    assert user.id == user_data['id']
+    assert user.username == user_data['username']
+    assert user.email == user_data['email']
+
+
 def test_user_to_dict():
     user_id = uuid4()
     username = "john_doe"
