@@ -8,6 +8,8 @@ packages = [{include = "py_clean_arch_task_manager"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+fastapi = "^0.101.0"
+uvicorn = "^0.23.2"
 
 
 [tool.poetry.group.dev.dependencies]
