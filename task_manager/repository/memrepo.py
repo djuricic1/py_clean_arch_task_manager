@@ -15,7 +15,6 @@ class MemRepo:
         self,
         task_save_input: TaskSaveInput,
     ) -> Task:
-        s = 0
         task = Task(uuid4(), **task_save_input.model_dump())
 
         self.data.append(task)
