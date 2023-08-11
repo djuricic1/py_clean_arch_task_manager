@@ -1,18 +1,50 @@
-from fastapi import FastAPI
+from datetime import date
+from functools import lru_cache
+from typing import Type, Annotated
+from uuid import UUID
 
-from task_manager.domain.input.task import TaskSaveInput
+import uvicorn
+from fastapi import FastAPI, Depends
+
+from task_manager.domain.entities import Task, Priority, Status
+from task_manager.domain.ports.repository_factory import IRepositoryFactory
 from task_manager.domain.use_cases.task_use_cases import create_task_use_case
-from task_manager.repository.memrepo import MemRepo
+from task_manager.repository.in_memory_repo_factory import MemRepoFactory
 
 app = FastAPI()
 
 
-@app.post("/task/")
-def create_task(task_save_input: TaskSaveInput):
-    task_repo = MemRepo([])
+class TaskSaveInput:
+    pass
 
-    result = create_task_use_case(
-        repo=task_repo, task_save_input=task_save_input
+
+@lru_cache
+def get_repository_factory() -> IRepositoryFactory:
+    return MemRepoFactory([])
+
+
+@app.post("/task/", response_model=None)
+def create_task(
+    repository_factory: Annotated[IRepositoryFactory, Depends(get_repository_factory)],
+):
+    in_memory_task_repo = repository_factory.create_repository(Type[Task])
+
+    random_task = Task(
+        id=UUID('b4c57439-bde0-461e-b811-c37f7abe21a0'),
+        title="Complete Project Report",
+        description="Write a detailed project report for the quarterly review.",
+        due_date=date(2023, 8, 25),
+        priority=Priority.HIGH,
+        status=Status.IN_PROGRESS,
+        assignee_id=UUID('b4c57439-bde0-461e-b811-c37f7abe21a0')
     )
 
+    result = create_task_use_case(
+        repo=in_memory_task_repo, task = random_task)
+
     return result
+
+
+if __name__ == '__main__':
+    # just for now
+    uvicorn.run(app, host="0.0.0.0", port=80)

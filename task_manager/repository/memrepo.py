@@ -1,25 +1,23 @@
-from uuid import uuid4, UUID
+from uuid import UUID
 
 from task_manager.domain.entities import Task
 
 
 # Just for illustration in-memory storage for now
-from task_manager.domain.input.task import TaskSaveInput, TaskUpdateInput
+from task_manager.domain.ports.repository import IRepository
 
 
-class MemRepo:
-    def __init__(self, data: list):
+class InMemoryTaskRepository(IRepository[Task, UUID]):
+    def __init__(self, data: list[Task]):
         self.data = data
 
     def save(
         self,
-        task_save_input: TaskSaveInput,
+        arg: Task,
     ) -> Task:
-        task = Task(uuid4(), **task_save_input.model_dump())
+        self.data.append(arg)
 
-        self.data.append(task)
-
-        return task
+        return arg
 
     def get_all(self) -> list[Task]:
         return self.data
@@ -29,17 +27,10 @@ class MemRepo:
             if d.id == id_:
                 return d
 
-    def update(self, task_update_input: TaskUpdateInput) -> Task:
-        for d in self.data:
-            if d.id == task_update_input.id_:
-                d = Task(id=d.id,
-                         **task_update_input)
-                break
+    def update(self, arg: Task) -> Task:
+        # TODO add impl
+        raise NotImplementedError()
 
     def delete(self, id_: UUID) -> bool:
-        try:
-            self.data.pop()
-        except Exception as ex:
-            # TODO add new exception type here
-            raise ex
-        return True
+        # TODO add impl
+        raise NotImplementedError()

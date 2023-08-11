@@ -3,6 +3,8 @@ from dataclasses import dataclass, asdict
 from enum import Enum
 from uuid import UUID
 
+from pydantic import BaseModel
+
 
 class Priority(Enum):
     HIGH = "High"
