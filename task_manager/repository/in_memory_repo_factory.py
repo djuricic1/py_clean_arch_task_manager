@@ -10,7 +10,7 @@ K = TypeVar("K")
 
 
 class MemRepoFactory(IRepositoryFactory):
-    def __init__(self, data = []):
+    def __init__(self, data=[]):
         self.data = data
         self.repos = {
             Type[Task]: InMemoryTaskRepository,
