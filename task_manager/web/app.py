@@ -4,6 +4,7 @@ from typing import Annotated, Type
 from uuid import UUID
 
 from fastapi import FastAPI, Depends
+from pydantic import BaseModel
 
 from task_manager.domain.entities import Task, User
 from task_manager.domain.enums.task_priority import Priority
@@ -20,23 +21,25 @@ def get_repository_factory() -> IRepositoryFactory:
     return MemRepoFactory([])
 
 
+class TaskCreatePayload(BaseModel):
+    title: str
+    description: str
+    due_date: date
+    priority: Priority
+    status: Status
+    assignee_id: UUID
+
+
 @rest_app.post("/task/", response_model=None)
 def create_task(
     repository_factory: Annotated[
         IRepositoryFactory, Depends(get_repository_factory)
     ],
+    task: TaskCreatePayload,
 ) -> Task:
     in_memory_task_repo = repository_factory.create_repository(Type[Task])
 
-    random_task = Task(
-        id=UUID("b4c57439-bde0-461e-b811-c37f7abe21a0"),
-        title="Complete Project Report",
-        description="Write a detailed project report for the quarterly review.",
-        due_date=date(2023, 8, 25),
-        priority=Priority.HIGH,
-        status=Status.IN_PROGRESS,
-        assignee_id=UUID("b4c57439-bde0-461e-b811-c37f7abe21a0"),
-    )
+    random_task = Task.create_from_dict(task.model_dump())
 
     result = create_task_use_case(repo=in_memory_task_repo, task=random_task)
 
