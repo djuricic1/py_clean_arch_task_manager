@@ -5,7 +5,7 @@ from uuid import UUID
 
 from fastapi import FastAPI, Depends
 
-from task_manager.domain.entities import Task
+from task_manager.domain.entities import Task, User
 from task_manager.domain.enums.task_priority import Priority
 from task_manager.domain.enums.task_status import Status
 from task_manager.domain.ports.repository_factory import IRepositoryFactory
