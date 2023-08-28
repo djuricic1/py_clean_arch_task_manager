@@ -3,7 +3,7 @@ from typing import Type, TypeVar
 from task_manager.domain.entities import Task
 from task_manager.domain.ports.repository import IRepository
 from task_manager.domain.ports.repository_factory import IRepositoryFactory
-from task_manager.repository.in_memory_repositories.memrepo import InMemoryTaskRepository
+from task_manager.repository.in_memory_repositories.task_memrepo import InMemoryTaskRepository
 
 T = TypeVar("T")
 K = TypeVar("K")
