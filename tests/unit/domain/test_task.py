@@ -1,7 +1,9 @@
 from datetime import date
 from uuid import uuid4
 
-from task_manager.domain.entities.task import Task, Priority, Status
+from task_manager.domain.entities.task import Task
+from task_manager.domain.enums.task_priority import Priority
+from task_manager.domain.enums.task_status import Status
 
 
 def test_task_init():

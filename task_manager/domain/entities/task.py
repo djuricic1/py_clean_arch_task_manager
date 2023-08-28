@@ -1,19 +1,9 @@
 import datetime
 from dataclasses import dataclass, asdict
-from enum import Enum
 from uuid import UUID
 
-
-class Priority(Enum):
-    HIGH = "High"
-    MEDIUM = "Medium"
-    LOW = "Low"
-
-
-class Status(Enum):
-    NOT_STARTED = "Not started"
-    IN_PROGRESS = "In progress"
-    COMPLETED = "Completed"
+from task_manager.domain.enums import Priority
+from task_manager.domain.enums import Status
 
 
 @dataclass
