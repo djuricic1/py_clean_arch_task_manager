@@ -23,8 +23,8 @@ class GenericMemRepo(IRepository[T, K]):
 
     def update(self, arg: T) -> T:
         # TODO add impl
-        raise NotImplementedError()
+        ...
 
     def delete(self, id_: K) -> bool:
         # TODO add impl
-        raise NotImplementedError()
+        ...
