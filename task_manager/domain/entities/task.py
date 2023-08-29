@@ -17,8 +17,13 @@ class Task:
     id: UUID = field(default_factory=uuid4)
 
     @classmethod
-    def create_from_dict(cls, data: dict) -> "Task":
-        return Task(**data)
+    def create_from_dict(
+        cls, data: dict, task_id: UUID | None = None
+    ) -> "Task":
+        task = Task(**data)
+        if task_id:
+            task.id = task_id
+        return task
 
     def to_dict(self) -> dict:
         return asdict(self)

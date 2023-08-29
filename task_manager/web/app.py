@@ -6,7 +6,7 @@ from uuid import UUID
 from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 
-from task_manager.domain.entities import Task, User
+from task_manager.domain.entities import Task
 from task_manager.domain.enums.task_priority import Priority
 from task_manager.domain.enums.task_status import Status
 from task_manager.domain.ports.repository_factory import IRepositoryFactory
@@ -21,7 +21,7 @@ def get_repository_factory() -> IRepositoryFactory:
     return MemRepoFactory([])
 
 
-class TaskCreatePayload(BaseModel):
+class TaskPayload(BaseModel):
     title: str
     description: str
     due_date: date
@@ -35,13 +35,14 @@ def create_task(
     repository_factory: Annotated[
         IRepositoryFactory, Depends(get_repository_factory)
     ],
-    task: TaskCreatePayload,
+    task_payload: TaskPayload,
 ) -> Task:
     in_memory_task_repo = repository_factory.create_repository(Type[Task])
 
-    random_task = Task.create_from_dict(task.model_dump())
-
-    result = create_task_use_case(repo=in_memory_task_repo, task=random_task)
+    result = create_task_use_case(
+        repo=in_memory_task_repo,
+        task=Task.create_from_dict(task_payload.model_dump()),
+    )
 
     return result
 
@@ -62,7 +63,7 @@ def get_task_by_id(
         IRepositoryFactory, Depends(get_repository_factory)
     ],
     task_id: UUID,
-):
+) -> Task:
     in_memory_task_repo = repository_factory.create_repository(Type[Task])
     return in_memory_task_repo.get_by_id(task_id)
 
@@ -73,19 +74,12 @@ def update_task_by_id(
         IRepositoryFactory, Depends(get_repository_factory)
     ],
     task_id: UUID,
-):
-    random_task = Task(
-        id=UUID("b4c57439-bde0-461e-b811-c37f7abe21a0"),
-        title="Complete Project Report",
-        description="Write a detailed project report for the quarterly review.",
-        due_date=date(2023, 8, 25),
-        priority=Priority.HIGH,
-        status=Status.COMPLETED,
-        assignee_id=UUID("b4c57439-bde0-461e-b811-c37f7abe21a0"),
-    )
-
+    task_payload: TaskPayload,
+) -> Task:
     in_memory_task_repo = repository_factory.create_repository(Type[Task])
-    return in_memory_task_repo.update(random_task)
+    return in_memory_task_repo.update(
+        Task.create_from_dict(task_payload.model_dump(), task_id=task_id)
+    )
 
 
 @rest_app.delete("/task/{task_id}")
@@ -94,6 +88,6 @@ def delete_task_by_id(
         IRepositoryFactory, Depends(get_repository_factory)
     ],
     task_id: UUID,
-):
+) -> bool:
     in_memory_task_repo = repository_factory.create_repository(Type[Task])
     return in_memory_task_repo.delete(task_id)
