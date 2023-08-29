@@ -9,8 +9,13 @@ class User:
     email: str
 
     @classmethod
-    def create_from_dict(cls, data: dict) -> "User":
-        return User(**data)
+    def create_from_dict(
+            cls, data: dict, user_id: UUID | None = None
+    ) -> "User":
+        user = User(**data)
+        if user_id:
+            user.id = user_id
+        return user
 
     def to_dict(self) -> dict:
         return asdict(self)

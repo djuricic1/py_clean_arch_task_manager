@@ -3,7 +3,8 @@ from functools import lru_cache
 from typing import Annotated, Type
 from uuid import UUID
 
-from fastapi import FastAPI, Depends
+from fastapi import Depends
+from fastapi import APIRouter
 from pydantic import BaseModel
 
 from task_manager.domain.entities import Task
@@ -13,7 +14,7 @@ from task_manager.domain.ports.repository_factory import IRepositoryFactory
 from task_manager.domain.use_cases.task_use_cases import create_task_use_case
 from task_manager.repository.in_memory_repo_factory import MemRepoFactory
 
-rest_app = FastAPI()
+task_router = APIRouter()
 
 
 @lru_cache
@@ -30,7 +31,7 @@ class TaskPayload(BaseModel):
     assignee_id: UUID
 
 
-@rest_app.post("/task/", response_model=None)
+@task_router.post("/task/", response_model=None)
 def create_task(
     repository_factory: Annotated[
         IRepositoryFactory, Depends(get_repository_factory)
@@ -47,7 +48,7 @@ def create_task(
     return result
 
 
-@rest_app.get("/task/")
+@task_router.get("/task/")
 def get_tasks(
     repository_factory: Annotated[
         IRepositoryFactory, Depends(get_repository_factory)
@@ -57,7 +58,7 @@ def get_tasks(
     return in_memory_task_repo.get_all()
 
 
-@rest_app.get("/task/{task_id}")
+@task_router.get("/task/{task_id}")
 def get_task_by_id(
     repository_factory: Annotated[
         IRepositoryFactory, Depends(get_repository_factory)
@@ -68,7 +69,7 @@ def get_task_by_id(
     return in_memory_task_repo.get_by_id(task_id)
 
 
-@rest_app.post("/task/{task_id}")
+@task_router.post("/task/{task_id}")
 def update_task_by_id(
     repository_factory: Annotated[
         IRepositoryFactory, Depends(get_repository_factory)
@@ -82,7 +83,7 @@ def update_task_by_id(
     )
 
 
-@rest_app.delete("/task/{task_id}")
+@task_router.delete("/task/{task_id}")
 def delete_task_by_id(
     repository_factory: Annotated[
         IRepositoryFactory, Depends(get_repository_factory)
