@@ -12,14 +12,12 @@ from task_manager.domain.enums.task_priority import Priority
 from task_manager.domain.enums.task_status import Status
 from task_manager.domain.ports.repository_factory import IRepositoryFactory
 from task_manager.domain.use_cases.task_use_cases import create_task_use_case
-from task_manager.repository.in_memory_repo_factory import MemRepoFactory
+from task_manager.repository.in_memory_repo_factory import (
+    MemRepoFactory,
+    get_repository_factory,
+)
 
 task_router = APIRouter()
-
-
-@lru_cache
-def get_repository_factory() -> IRepositoryFactory:
-    return MemRepoFactory([])
 
 
 class TaskPayload(BaseModel):

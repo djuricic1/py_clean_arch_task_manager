@@ -1,3 +1,4 @@
+from functools import lru_cache
 from typing import Type, TypeVar
 
 from task_manager.domain.entities import Task, User
@@ -24,3 +25,8 @@ class MemRepoFactory(IRepositoryFactory):
 
     def create_repository(self, type_: Type) -> IRepository[T, K]:
         return self.repos[type_](self.data)
+
+
+@lru_cache
+def get_repository_factory() -> IRepositoryFactory:
+    return MemRepoFactory([])

@@ -10,7 +10,7 @@ class User:
 
     @classmethod
     def create_from_dict(
-            cls, data: dict, user_id: UUID | None = None
+        cls, data: dict, user_id: UUID | None = None
     ) -> "User":
         user = User(**data)
         if user_id:

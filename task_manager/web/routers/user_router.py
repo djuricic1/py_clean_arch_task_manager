@@ -8,14 +8,11 @@ from pydantic import BaseModel
 
 from task_manager.domain.entities import User
 from task_manager.domain.ports.repository_factory import IRepositoryFactory
-from task_manager.repository.in_memory_repo_factory import MemRepoFactory
+from task_manager.repository.in_memory_repo_factory import (
+    get_repository_factory,
+)
 
 user_router = APIRouter()
-
-
-@lru_cache
-def get_repository_factory() -> IRepositoryFactory:
-    return MemRepoFactory([])
 
 
 class UserPayload(BaseModel):
@@ -32,7 +29,9 @@ def create_user(
 ) -> User:
     in_memory_user_repo = repository_factory.create_repository(Type[User])
 
-    result = in_memory_user_repo.save(arg=User.create_from_dict(user_payload.model_dump()))
+    result = in_memory_user_repo.save(
+        arg=User.create_from_dict(user_payload.model_dump())
+    )
 
     return result
 
