@@ -60,7 +60,7 @@ class FakeRepositoryFactory:
         return FakeRepository()
 
 
-async def get_fake_repository_factory() -> AsyncIterator[IRepositoryFactory]:
+def get_fake_repository_factory() -> AsyncIterator[IRepositoryFactory]:
     yield FakeRepositoryFactory()
 
 
