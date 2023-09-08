@@ -17,16 +17,16 @@ def test_user_init():
 
 def test_user_create_from_dict():
     user_data = {
-        'id': uuid4(),
-        'username': 'alice',
-        'email': 'alice@example.com'
+        "id": uuid4(),
+        "username": "alice",
+        "email": "alice@example.com",
     }
 
     user = User.create_from_dict(user_data)
 
-    assert user.id == user_data['id']
-    assert user.username == user_data['username']
-    assert user.email == user_data['email']
+    assert user.id == user_data["id"]
+    assert user.username == user_data["username"]
+    assert user.email == user_data["email"]
 
 
 def test_user_to_dict():
@@ -38,8 +38,4 @@ def test_user_to_dict():
 
     user_dict = user.to_dict()
 
-    assert user_dict == {
-        'id': user_id,
-        'username': username,
-        'email': email
-    }
+    assert user_dict == {"id": user_id, "username": username, "email": email}

@@ -1,5 +1,4 @@
 from datetime import date
-from functools import lru_cache
 from typing import Annotated, Type
 from uuid import UUID
 
@@ -13,7 +12,6 @@ from task_manager.domain.enums.task_status import Status
 from task_manager.domain.ports.repository_factory import IRepositoryFactory
 from task_manager.domain.use_cases.task_use_cases import create_task_use_case
 from task_manager.repository.in_memory_repo_factory import (
-    MemRepoFactory,
     get_repository_factory,
 )
 
