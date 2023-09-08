@@ -1,3 +1,5 @@
+from typing import Type
+
 import pytest
 
 from collections.abc import AsyncIterator
@@ -8,7 +10,7 @@ from fastapi import FastAPI
 from task_manager.app import app as web_app
 from fastapi.testclient import TestClient
 
-from task_manager.domain.ports.repository import IRepository, T, K
+from task_manager.domain.ports.repository import IRepository, T
 from task_manager.domain.ports.repository_factory import IRepositoryFactory
 from task_manager.repository.in_memory_repo_factory import (
     get_repository_factory,
@@ -18,7 +20,7 @@ from task_manager.repository.in_memory_repo_factory import (
 class FakeRepository(IRepository[T, UUID]):
     session: list[T]
 
-    def __init__(self, session: list[T] | None):
+    def __init__(self, session: list[T] | None = []):
         self.session = session or []
 
     def save(self, obj: T) -> T:
@@ -35,14 +37,14 @@ class FakeRepository(IRepository[T, UUID]):
             None,
         )
         # if not ret:
-        #     raise ObjectNotFound(f"Object with id '{id_}' not found")
+        # raise some error here
         return ret
 
     def get_all(self) -> list[T]:
         return self.session
 
     def update(self, obj: T, commit: bool = True) -> T:
-        item = await self.get_by_id(obj.id)  # type: ignore[attr-defined]
+        item = self.get_by_id(obj.id)  # type: ignore[attr-defined]
 
         for name, value in vars(obj).items():
             setattr(item, name, value)
@@ -55,8 +57,8 @@ class FakeRepository(IRepository[T, UUID]):
         return bool(self.session.remove(obj))
 
 
-class FakeRepositoryFactory:
-    def create_repository(self, type_: type) -> IRepository[T, K]:
+class FakeRepositoryFactory(IRepositoryFactory):
+    def create_repository(self, type_: Type) -> FakeRepository:
         return FakeRepository()
 
 
